@@ -1,0 +1,191 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\pch.cpp" />
+    <ClCompile Include="..\base\utils\singleton.cpp">
+      <Filter>base\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\base\main.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\base\services\input_service.cpp">
+      <Filter>base\services</Filter>
+    </ClCompile>
+    <ClCompile Include="..\base\services\render_service.cpp">
+      <Filter>base\services</Filter>
+    </ClCompile>
+    <ClCompile Include="..\base\services\service.cpp">
+      <Filter>base\services</Filter>
+    </ClCompile>
+    <ClCompile Include="..\base\services\service_manager.cpp">
+      <Filter>base\services</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\game.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\base\render\particle_system.cpp">
+      <Filter>base\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\base\math\transformable.cpp">
+      <Filter>base\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\base\main\asset.cpp">
+      <Filter>base\main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\base\main\gameplay_assets.cpp">
+      <Filter>base\main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\base\services\tracker_service.cpp">
+      <Filter>base\services</Filter>
+    </ClCompile>
+    <ClCompile Include="..\base\services\debug_service.cpp">
+      <Filter>base\services</Filter>
+    </ClCompile>
+    <ClCompile Include="..\base\utils\profiler.cpp">
+      <Filter>base\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\base\main\dictionary.cpp">
+      <Filter>base\main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\base\utils\utils.cpp">
+      <Filter>base\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\base\services\social_service.cpp">
+      <Filter>base\services</Filter>
+    </ClCompile>
+    <ClCompile Include="..\base\services\storefront_service.cpp">
+      <Filter>base\services</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\services\ui_service.cpp">
+      <Filter>game\services</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\memory_stream.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\services\scene_service.cpp">
+      <Filter>game\services</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\pch.h" />
+    <ClInclude Include="..\base\utils\noncopyable.h">
+      <Filter>base\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\base\utils\priority_signal.h">
+      <Filter>base\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\base\utils\singleton.h">
+      <Filter>base\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\base\main.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\base\services\input_service.h">
+      <Filter>base\services</Filter>
+    </ClInclude>
+    <ClInclude Include="..\base\services\render_service.h">
+      <Filter>base\services</Filter>
+    </ClInclude>
+    <ClInclude Include="..\base\services\service.h">
+      <Filter>base\services</Filter>
+    </ClInclude>
+    <ClInclude Include="..\base\services\service_manager.h">
+      <Filter>base\services</Filter>
+    </ClInclude>
+    <ClInclude Include="..\base\services\signals.h">
+      <Filter>base\services</Filter>
+    </ClInclude>
+    <ClInclude Include="..\base\render\mem_fn_render_click.h">
+      <Filter>base\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\game.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\base\render\particle_system.h">
+      <Filter>base\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\base\utils\curve.h">
+      <Filter>base\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\base\utils\utils.h">
+      <Filter>base\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\base\math\transformable.h">
+      <Filter>base\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\base\utils\ref_ptr.h">
+      <Filter>base\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\base\main\cache.h">
+      <Filter>base\main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\base\main\asset.h">
+      <Filter>base\main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\base\main\gameplay_assets.h">
+      <Filter>base\main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\base\services\tracker_service.h">
+      <Filter>base\services</Filter>
+    </ClInclude>
+    <ClInclude Include="..\base\services\debug_service.h">
+      <Filter>base\services</Filter>
+    </ClInclude>
+    <ClInclude Include="..\base\utils\profiler.h">
+      <Filter>base\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\base\main\dictionary.h">
+      <Filter>base\main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\base\services\social_service.h">
+      <Filter>base\services</Filter>
+    </ClInclude>
+    <ClInclude Include="..\base\services\storefront_service.h">
+      <Filter>base\services</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\services\ui_service.h">
+      <Filter>game\services</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\memory_stream.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\signals.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\services\scene_service.h">
+      <Filter>game\services</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\version.inl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="game">
+      <UniqueIdentifier>{0a0e8aab-e79d-4147-8ecd-a4a31fadeec1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="base">
+      <UniqueIdentifier>{b1aaddb5-ff42-4da6-9340-1b5f4c26967b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="base\utils">
+      <UniqueIdentifier>{c186f6b6-ab40-4558-a862-8f322b69aae4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="base\services">
+      <UniqueIdentifier>{955bde23-64e7-4902-b7fc-ee623c4a08fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="base\render">
+      <UniqueIdentifier>{60d48787-9f21-48ff-88ae-9fd649875e2f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="base\math">
+      <UniqueIdentifier>{bcf1d5f9-e704-4644-96ae-0eda128cd7aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="base\main">
+      <UniqueIdentifier>{8e00a9df-a24b-4508-8cd4-985a4e579ff4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game\services">
+      <UniqueIdentifier>{c1400f0e-5af6-4b32-9d36-ab1cad1c6f78}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\res\resource.rc" />
+  </ItemGroup>
+</Project>

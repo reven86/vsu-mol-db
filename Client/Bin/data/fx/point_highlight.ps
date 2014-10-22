@@ -1,0 +1,52 @@
+particle_system:
+  subsystem:
+  - material: "materials/sfx/gradient_radial2_add.material"
+
+    emitter_pos: [0.0, 0.0, 0.0]
+    accelerate_dir: [0.0, 0.0, 0.0]
+    velocity_dir: [0.0, 1.0, 0.0]
+    volume: [0.0, 0.0, 0.0]
+    max_particles: 3
+    spawn_count: 0
+
+    lifetime: 1.0
+    size: 0.2
+    velocity: 0
+    acceleration: 0
+    emissionrange: 180
+    spin: 0
+    motionrand: 0
+    particleangle: 0
+
+    life_variation: 0
+    size_variation: 0
+    velocity_variation: 0
+    accelerate_variation: 0
+    spin_variation: 10
+    motionrand_variation: 0
+    particleangle_variation: 360
+    starttime_variation: 0.5
+
+    size_curve:
+    - key: [0, 0.0]
+    - key: [255, 2.0]
+
+    velocity_curve:
+    - key: [0, 1.0]
+    - key: [255, 1.0]
+
+    acceleration_curve:
+    - key: [0, 1.0]
+    - key: [255, 1.0]
+
+    spin_curve:
+    - key: [0, 1.0]
+    - key: [255, 1.0]
+
+    motionrand_curve:
+    - key: [0, 1.0]
+    - key: [255, 1.0]
+
+    colors_curve:
+    - key: [0, 0xffffffff]
+    - key: [255, 0x00ffffff]

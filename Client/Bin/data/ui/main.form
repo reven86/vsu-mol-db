@@ -1,0 +1,607 @@
+form:
+  id: main
+  size: [100%, 100%]
+  style: Empty
+  batchingEnabled: false
+
+  ${iconScale}: 2.0
+  ${iconScaleHalf}: 1.0
+  ${H3Size}: 10
+  ${sideBarWidth}: 160.0
+  ${fontSize}: 12  # this should math fontSize of the Theme
+
+  button:
+  - id: sidebarToggleButton
+    x: ${sideBarWidth}
+    y: 10
+    text: "<<"
+
+  container:
+  - alignment: ALIGN_TOP_RIGHT
+    margin: {top: 10, right: 10}
+    layout: LAYOUT_HORIZONTAL
+    button:
+    - id: discussButton
+      text: UI_discuss
+    - id: aboutButton
+      text: "?"
+
+  - id: sidebarControls
+    alignment: ALIGN_TOP_LEFT
+    style: Form
+    consumeInputEvents: true
+    height: 100%
+    width: ${sideBarWidth}
+    scroll: SCROLL_VERTICAL
+    scrollBarsAutoHide: false
+
+    container:
+      width: 100%
+      layout: LAYOUT_VERTICAL
+      alignment: ALIGN_TOP_LEFT
+
+      container:
+      - id: viewControls
+        layout: LAYOUT_VERTICAL
+        width: 100%
+
+        label:
+        - text: UI_view_options
+          style: TitleLabel
+
+        button:
+        - id: selectTankButton
+          width: 100%
+        - id: viewModeButton
+          width: 100%
+
+        slider:
+        - id: turretYawSlider
+          width: 100%
+          min: -180
+          max: 180
+          value: 0
+          text: UI_turret_yaw
+          orientation: HORIZONTAL
+          valueTextVisible: true
+        - id: gunPitchSlider
+          width: 100%
+          min: -90
+          max: 90
+          value: 0
+          text: UI_gun_pitch
+          orientation: HORIZONTAL
+          valueTextVisible: true
+
+      - id: armorFilterContainer
+        layout: LAYOUT_VERTICAL
+        visible: false
+        margin: {top: 10}
+        width: 100%
+
+        label:
+        - style: TitleLabel
+          margin: {bottom: 5, right: 5, left: 5}
+          text: UI_filter
+
+        container:
+          layout: LAYOUT_VERTICAL
+          style: Form
+          width: 100%
+        
+          checkbox:
+          - id: primaryArmorFilterCheckBox
+            text: UI_primary_armor
+            iconScale: ${iconScale}
+            width: 100%
+          - id: spacedArmorFilterCheckBox
+            text: UI_spaced_armor
+            iconScale: ${iconScale}
+            width: 100%
+          - id: externalDeviceFilterCheckBox
+            text: UI_external_device
+            iconScale: ${iconScale}
+            width: 100%
+          - id: internalDeviceFilterCheckBox
+            text: UI_internal_device
+            iconScale: ${iconScale}
+            width: 100%
+          - id: crewFilterCheckBox
+            text: UI_crew
+            iconScale: ${iconScale}
+            width: 100%
+
+      - id: piercingOptions
+        layout: LAYOUT_VERTICAL
+        visible: false
+        margin: {top: 10}
+        width: 100%
+
+        label:
+        - text: UI_piercing_options
+          style: TitleLabel
+
+        button:
+        - id: selectGunButton
+          width: 100%
+
+        slider:
+        - id: piercingDistanceSlider
+          width: 100%
+          min: 100
+          max: 500
+          value: 100
+          text: UI_distance_slider
+          orientation: HORIZONTAL
+          valueTextVisible: true
+          margin: {top: 10}
+
+        checkbox:
+        - id: piercingDeviceDamageCheckbox
+          text: UI_piercing_device_damage
+          margin: {top: 10}
+          iconScale: ${iconScale}
+          width: 100%
+        - id: antifragmentationLiningCheckbox
+          margin: {top: 10}
+          iconScale: ${iconScale}
+          width: 100%
+          text: UI_antifragmentation_lining_installed
+          visible: false
+
+        container:
+        - width: 100%
+          layout: LAYOUT_VERTICAL
+          style: Form
+          margin: {top: 10, bottom: 10}
+
+          label:
+          - id: piercingLabel
+          - id: caliberLabel
+          - text: UI_damage
+          - id: damageArmorLabel
+          - id: damageDevicesLabel
+          - id: explosionRadiusLabel
+        - width: 100%
+          layout: LAYOUT_VERTICAL
+
+          radioButton:
+          - id: shell1
+            selected: true
+            group: shellKind
+            iconScale: ${iconScale}
+            width: 100%
+          - id: shell2
+            group: shellKind
+            iconScale: ${iconScale}
+            width: 100%
+          - id: shell3
+            group: shellKind
+            iconScale: ${iconScale}
+            width: 100%
+
+  - layout: LAYOUT_VERTICAL
+    alignment: ALIGN_BOTTOM_RIGHT
+    width: 100%
+    margin: {left: "${sideBarWidth}"}
+
+    container:
+    - id: antifragmentationLiningContainer
+      layout: LAYOUT_VERTICAL
+      visible: false
+      width: 100%
+      margin: {left: 2, right: 2}
+
+      container:
+        layout: LAYOUT_HORIZONTAL
+        width: 100%
+        container:
+        - width: 15%
+          label:
+            alignment: ALIGN_VCENTER_HCENTER
+            text: UI_damage
+        - width: 21%
+          container:
+            alignment: ALIGN_VCENTER_HCENTER
+            layout: LAYOUT_HORIZONTAL
+            image: {path: "materials/vehicle/damage_ramp.png", srcRegion: [25, 0, 1, 1], width: "${fontSize}", height: "${fontSize}"}
+            label:
+              text: " 10%"
+        - width: 21%
+          container:
+            alignment: ALIGN_VCENTER_HCENTER
+            layout: LAYOUT_HORIZONTAL
+            image: {path: "materials/vehicle/damage_ramp.png", srcRegion: [120, 0, 1, 1], width: "${fontSize}", height: "${fontSize}"}
+            label:
+              text: " 25%"
+        - width: 21%
+          container:
+            alignment: ALIGN_VCENTER_HCENTER
+            layout: LAYOUT_HORIZONTAL
+            image: {path: "materials/vehicle/damage_ramp.png", srcRegion: [230, 0, 1, 1], width: "${fontSize}", height: "${fontSize}"}
+            label:
+              text: " 50%"
+        - width: 22%
+          container:
+            alignment: ALIGN_VCENTER_HCENTER
+            layout: LAYOUT_HORIZONTAL
+            image: {path: "materials/vehicle/damage_ramp.png", srcRegion: [255, 0, 1, 1], width: "${fontSize}", height: "${fontSize}"}
+            label:
+              text: " 100%"
+
+    - id: piercingInfoContainer
+      layout: LAYOUT_VERTICAL
+      visible: false
+      style: Form
+      consumeInputEvents: true
+      width: 100%
+
+      label:
+      - id: piercingChanceLabel
+        style: H2Label
+        margin: {right: 5, left: 5}
+      - id: piercingResultLabel
+        style: H3Label
+        margin: {right: 5, left: 5}
+      - id: piercingDamageHEPenetrationLabel
+        visible: false
+        margin: {right: 5, left: 5}
+      - id: piercingDamageHENoPenetrationLabel
+        visible: false
+        margin: {right: 5, left: 5}
+      - id: piercingLossLabel
+        style: H3Label
+        visible: false
+        margin: {right: 5, left: 5}
+
+      container:
+      - layout: LAYOUT_VERTICAL
+        width: 100%
+        container:
+        - id: piercingArmorGroupsContainer
+          layout: LAYOUT_HORIZONTAL
+          style: Form
+          width: 100%
+      
+          container:
+          - id: piercingDistanceGroup
+            layout: LAYOUT_VERTICAL
+            width: 0%
+            visible: false
+          - id: piercingNominalArmorGroup
+            layout: LAYOUT_VERTICAL
+            width: 30%
+          - id: piercingAngleGroup
+            layout: LAYOUT_VERTICAL
+            width: 25%
+          - id: piercingTotalArmorGroup
+            layout: LAYOUT_VERTICAL
+            width: 45%
+          - id: piercingDFGroup
+            layout: LAYOUT_VERTICAL
+            visible: false
+            width: 0%
+        - id: piercingDevicesInfoContainer
+          layout: LAYOUT_VERTICAL
+          width: 100%
+          style: Form
+          visible: false
+
+  - id: armorInfoContainer
+    alignment: ALIGN_BOTTOM_RIGHT
+    layout: LAYOUT_VERTICAL
+    visible: false
+    style: Form
+    consumeInputEvents: true
+    width: 100%
+    margin: {left: "${sideBarWidth}"}
+
+    container:
+    - id: armorDetailedInfoContainer
+      layout: LAYOUT_VERTICAL
+      width: 100%
+
+      label:
+      - id: armorInfoLabel
+        style: TitleLabel
+        margin: {bottom: 5, right: 5, left: 5}
+        text: UI_properties
+
+      container:
+      - layout: LAYOUT_HORIZONTAL
+        style: Form
+        width: 100%
+
+        container:
+        - width: 50%
+          container:
+            layout: LAYOUT_VERTICAL
+            width: 100%
+
+            checkbox:
+            - id: primaryArmorCheckBox
+              text: UI_primary_armor
+              enabled: false
+              iconScale: ${iconScaleHalf}
+            - id: deviceCheckBox
+              text: UI_device
+              enabled: false
+              iconScale: ${iconScaleHalf}
+            - id: useArmorHomogenizationCheckBox
+              text: UI_armor_homogenization
+              enabled: false
+              iconScale: ${iconScaleHalf}
+        - width: 50%
+          container:
+            layout: LAYOUT_VERTICAL
+            width: 100%
+
+            checkbox:
+            - id: useHitAngleCheckBox
+              text: UI_use_hit_angle
+              enabled: false
+              iconScale: ${iconScaleHalf}
+            - id: mayRicochetCheckBox
+              text: UI_may_ricochet
+              enabled: false
+              iconScale: ${iconScaleHalf}
+            - id: collideOnceOnlyCheckBox
+              text: UI_collide_once
+              enabled: false
+              iconScale: ${iconScaleHalf}
+
+    - id: deviceInfoContainer
+      visible: false
+      layout: LAYOUT_VERTICAL
+      width: 100%
+      label:
+      - id: deviceInfoLabel
+        style: TitleLabel
+        margin: {bottom: 5, right: 5, left: 5}
+
+      container:
+      - layout: LAYOUT_HORIZONTAL
+        width: 100%
+        style: Form
+
+        container:
+        - width: 50%
+          layout: LAYOUT_VERTICAL
+          label:
+          - id: deviceHPTotalLabel
+          - id: deviceHPDamagedLabel
+        - width: 50%
+          layout: LAYOUT_VERTICAL
+          label:
+          - id: deviceChanceToHitLabel
+          - id: deviceChangeToHitExplosionLabel
+
+  - id: armorInfoHelpContainer
+    alignment: ALIGN_BOTTOM_RIGHT
+    layout: LAYOUT_VERTICAL
+    visible: false
+    style: Form
+    consumeInputEvents: false
+    width: 100%
+    margin: {left: "${sideBarWidth}"}
+
+    label:
+      style: H2Label
+      margin: {bottom: 5, right: 5, left: 5}
+      text: UI_armor_help
+  - id: piercingInfoHelpContainer
+    alignment: ALIGN_BOTTOM_RIGHT
+    layout: LAYOUT_VERTICAL
+    visible: false
+    style: Form
+    consumeInputEvents: false
+    width: 100%
+    margin: {left: "${sideBarWidth}"}
+
+    label:
+      style: H2Label
+      margin: {bottom: 5, right: 5, left: 5}
+      text: UI_piercing_help
+
+  - id: tankSelectionContainer
+    alignment: ALIGN_VCENTER_HCENTER
+    layout: LAYOUT_VERTICAL
+    visible: false
+    style: Form
+    consumeInputEvents: true
+
+    container:
+    - layout: LAYOUT_HORIZONTAL
+      margin: {bottom: 30}
+
+      container:
+      - id: tankFilterContainer
+        layout: LAYOUT_HORIZONTAL
+
+        container:
+        - layout: LAYOUT_VERTICAL
+          margin: {right: 30}
+
+          label:
+            text: UI_level
+            style: TitleLabel
+
+          container:
+            layout: LAYOUT_HORIZONTAL
+            container:
+            - layout: LAYOUT_VERTICAL
+
+              radioButton:
+              - id: level1CheckBox
+                text: 1
+                group: tankLevelGroup
+                iconScale: ${iconScale}
+              - id: level2CheckBox
+                text: 2
+                group: tankLevelGroup
+                iconScale: ${iconScale}
+              - id: level3CheckBox
+                text: 3   
+                group: tankLevelGroup
+                iconScale: ${iconScale}
+              - id: level4CheckBox
+                text: 4
+                group: tankLevelGroup
+                iconScale: ${iconScale}
+              - id: level5CheckBox
+                text: 5
+                group: tankLevelGroup
+                iconScale: ${iconScale}
+            - layout: LAYOUT_VERTICAL
+
+              radioButton:
+              - id: level6CheckBox
+                text: 6
+                group: tankLevelGroup
+                iconScale: ${iconScale}
+              - id: level7CheckBox
+                text: 7
+                group: tankLevelGroup
+                iconScale: ${iconScale}
+              - id: level8CheckBox
+                text: 8   
+                group: tankLevelGroup
+                iconScale: ${iconScale}
+                selected: true
+              - id: level9CheckBox
+                text: 9
+                group: tankLevelGroup
+                iconScale: ${iconScale}
+              - id: level10CheckBox
+                text: 10
+                group: tankLevelGroup
+                iconScale: ${iconScale}
+    
+        - layout: LAYOUT_VERTICAL
+          margin: {right: 30}
+
+          label:
+            text: UI_vehicle_type
+            style: TitleLabel
+
+          container:
+          - layout: LAYOUT_HORIZONTAL
+            radioButton: {id: anyTankTypeCheckBox, group: tankTypeGroup, iconScale: "${iconScale}", width: 55}
+            image: {size: [28, 18], path: "materials/icons/filters/tanks/all.png", consumeInputEvents: false, margin: {left: -30, top: 3}}
+          - layout: LAYOUT_HORIZONTAL
+            radioButton: {id: LTCheckBox, group: tankTypeGroup, iconScale: "${iconScale}", width: 55}
+            image: {size: [38, 24], path: "materials/icons/filters/tanks/lightTank.png", consumeInputEvents: false, margin: {left: -35}}
+          - layout: LAYOUT_HORIZONTAL
+            radioButton: {id: MTCheckBox, group: tankTypeGroup, iconScale: "${iconScale}", width: 55}
+            image: {size: [38, 24], path: "materials/icons/filters/tanks/mediumTank.png", consumeInputEvents: false, margin: {left: -35}}
+          - layout: LAYOUT_HORIZONTAL
+            radioButton: {id: HTCheckBox, group: tankTypeGroup, iconScale: "${iconScale}", width: 55, selected: true}
+            image: {size: [38, 24], path: "materials/icons/filters/tanks/heavyTank.png", consumeInputEvents: false, margin: {left: -35}}
+          - layout: LAYOUT_HORIZONTAL
+            radioButton: {id: ATSPGCheckBox, group: tankTypeGroup, iconScale: "${iconScale}", width: 55}
+            image: {size: [38, 24], path: "materials/icons/filters/tanks/AT-SPG.png", consumeInputEvents: false, margin: {left: -35}}
+          - layout: LAYOUT_HORIZONTAL
+            radioButton: {id: SPGCheckBox, group: tankTypeGroup, iconScale: "${iconScale}", width: 55}
+            image: {size: [38, 24], path: "materials/icons/filters/tanks/SPG.png", consumeInputEvents: false, margin: {left: -35}}
+
+        - layout: LAYOUT_VERTICAL
+          margin: {right: 30}
+
+          label:
+            text: UI_nation
+            style: TitleLabel
+
+          container:
+          - layout: LAYOUT_HORIZONTAL
+            radioButton: {id: anyNationCheckBox, group: tankNationGroup, iconScale: "${iconScale}", width: 65}
+            image: {size: [27, 17], path: "materials/icons/filters/nations/all.png", consumeInputEvents: false, margin: {left: -35, top: 2}}
+          - layout: LAYOUT_HORIZONTAL
+            radioButton: {id: ussrNationCheckBox, group: tankNationGroup, iconScale: "${iconScale}", selected: true, width: 65}
+            image: {size: [27, 17], path: "materials/icons/filters/nations/ussr.png", consumeInputEvents: false, margin: {left: -35, top: 2}}
+          - layout: LAYOUT_HORIZONTAL
+            radioButton: {id: germanyNationCheckBox, group: tankNationGroup, iconScale: "${iconScale}", width: 65}
+            image: {size: [27, 17], path: "materials/icons/filters/nations/germany.png", consumeInputEvents: false, margin: {left: -35, top: 2}}
+          - layout: LAYOUT_HORIZONTAL
+            radioButton: {id: usaNationCheckBox, group: tankNationGroup, iconScale: "${iconScale}", width: 65}
+            image: {size: [27, 17], path: "materials/icons/filters/nations/usa.png", consumeInputEvents: false, margin: {left: -35, top: 2}}
+          - layout: LAYOUT_HORIZONTAL
+            radioButton: {id: franceNationCheckBox, group: tankNationGroup, iconScale: "${iconScale}", width: 65}
+            image: {size: [27, 17], path: "materials/icons/filters/nations/france.png", consumeInputEvents: false, margin: {left: -35, top: 2}}
+          - layout: LAYOUT_HORIZONTAL
+            radioButton: {id: ukNationCheckBox, group: tankNationGroup, iconScale: "${iconScale}", width: 65}
+            image: {size: [27, 17], path: "materials/icons/filters/nations/uk.png", consumeInputEvents: false, margin: {left: -35, top: 2}}
+          - layout: LAYOUT_HORIZONTAL
+            radioButton: {id: chinaNationCheckBox, group: tankNationGroup, iconScale: "${iconScale}", width: 65}
+            image: {size: [27, 17], path: "materials/icons/filters/nations/china.png", consumeInputEvents: false, margin: {left: -35, top: 2}}
+          - layout: LAYOUT_HORIZONTAL
+            radioButton: {id: japanNationCheckBox, group: tankNationGroup, iconScale: "${iconScale}", width: 65}
+            image: {size: [27, 17], path: "materials/icons/filters/nations/japan.png", consumeInputEvents: false, margin: {left: -35, top: 2}}
+
+      - id: tankFilterResultsContainer
+        layout: LAYOUT_VERTICAL
+        visible: false
+
+        container:
+        - layout: LAYOUT_VERTICAL
+
+          label:
+            text: UI_vehicles
+            style: TitleLabel
+
+          container:
+            id: vehicleList
+            width: 200
+            height: 85
+            style: Form
+            scroll: SCROLL_VERTICAL
+            scrollBarsAutoHide: false
+            layout: LAYOUT_VERTICAL
+
+        - id: gunSelectionColumn
+          layout: LAYOUT_VERTICAL
+
+          label:
+            text: UI_guns
+            style: TitleLabel
+
+          container:
+            id: gunsList
+            width: 200
+            height: 85
+            style: Form
+            scroll: SCROLL_VERTICAL
+            scrollBarsAutoHide: false
+            layout: LAYOUT_VERTICAL
+
+    - width: 100%
+      layout: LAYOUT_HORIZONTAL
+      button:
+      - id: tankSelectionOkButton
+        align: ALIGN_BOTTOM_RIGHT
+        text: UI_ok
+      - id: tankSelectionCancelButton
+        align: ALIGN_BOTTOM_RIGHT
+        text: UI_cancel
+
+  - id: aboutContainer
+    alignment: ALIGN_VCENTER_HCENTER
+    style: Form
+    consumeInputEvents: false
+    layout: LAYOUT_VERTICAL
+    visible: false
+
+    label:
+    - id: aboutLabel
+      style: TitleLabel
+      textAlignment: ALIGN_VCENTER_HCENTER
+
+    button:
+    - id: aboutMechanicsButton
+      alignment: ALIGN_HCENTER
+      text: UI_penetration_mechanics
+      width: 90%
+    - id: aboutCloseButton
+      alignment: ALIGN_HCENTER
+      text: UI_close
+      width: 90%
+
