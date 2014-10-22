@@ -20,3 +20,6 @@
 /Client/Source/_android/sdkdir
 
 /Client/Bin/data/internal.zip
+/Client/Source/_msvc/*.opensdf
+/Client/Source/_msvc/*.sdf
+/Client/Source/_msvc/*.suo
