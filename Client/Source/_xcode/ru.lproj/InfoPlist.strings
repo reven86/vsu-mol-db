@@ -1,0 +1,8 @@
+/* 
+  InfoPlist.strings
+  Copyright (c) 2014 Andrew Karpushin. All rights reserved.
+*/
+
+"CFBundleDisplayName" = "Molecular Suite";
+"CFBundleName" = "Molecular Suite";
+"GameLanguage" = "russian";

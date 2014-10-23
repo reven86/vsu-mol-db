@@ -1,0 +1,11 @@
+/* 
+  InfoPlist.strings
+  dfg-story-of-dragons
+
+  Created by Andrew Karpushin on 01/03/14.
+  Copyright (c) 2014 Andrew Karpushin. All rights reserved.
+*/
+
+"CFBundleDisplayName" = "Molecular Suite";
+"CFBundleName" = "Molecular Suite";
+"GameLanguage" = "english";
