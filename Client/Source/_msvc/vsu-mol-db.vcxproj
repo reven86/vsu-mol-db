@@ -80,9 +80,14 @@
     <ClCompile Include="..\base\utils\singleton.cpp" />
     <ClCompile Include="..\base\utils\utils.cpp" />
     <ClCompile Include="..\game\game.cpp" />
+    <ClCompile Include="..\game\generators\tube_generator.cpp" />
     <ClCompile Include="..\game\memory_stream.cpp" />
+    <ClCompile Include="..\game\molecule.cpp" />
+    <ClCompile Include="..\game\molecule_model.cpp" />
+    <ClCompile Include="..\game\primitives.cpp" />
     <ClCompile Include="..\game\services\scene_service.cpp" />
     <ClCompile Include="..\game\services\ui_service.cpp" />
+    <ClCompile Include="..\game\settings.cpp" />
     <ClCompile Include="..\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -114,9 +119,14 @@
     <ClInclude Include="..\base\utils\curve.h" />
     <ClInclude Include="..\base\utils\utils.h" />
     <ClInclude Include="..\game\game.h" />
+    <ClInclude Include="..\game\generators\tube_generator.h" />
     <ClInclude Include="..\game\memory_stream.h" />
+    <ClInclude Include="..\game\molecule.h" />
+    <ClInclude Include="..\game\molecule_model.h" />
+    <ClInclude Include="..\game\primitives.h" />
     <ClInclude Include="..\game\services\scene_service.h" />
     <ClInclude Include="..\game\services\ui_service.h" />
+    <ClInclude Include="..\game\settings.h" />
     <ClInclude Include="..\game\signals.h" />
     <ClInclude Include="..\pch.h" />
   </ItemGroup>

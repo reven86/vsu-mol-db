@@ -65,6 +65,21 @@
     <ClCompile Include="..\game\services\scene_service.cpp">
       <Filter>game\services</Filter>
     </ClCompile>
+    <ClCompile Include="..\game\molecule.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\molecule_model.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\primitives.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\generators\tube_generator.cpp">
+      <Filter>game\generators</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\settings.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\pch.h" />
@@ -155,6 +170,21 @@
     <ClInclude Include="..\game\services\scene_service.h">
       <Filter>game\services</Filter>
     </ClInclude>
+    <ClInclude Include="..\game\molecule.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\molecule_model.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\primitives.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\generators\tube_generator.h">
+      <Filter>game\generators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\settings.h">
+      <Filter>game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\version.inl" />
@@ -183,6 +213,9 @@
     </Filter>
     <Filter Include="game\services">
       <UniqueIdentifier>{c1400f0e-5af6-4b32-9d36-ab1cad1c6f78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game\generators">
+      <UniqueIdentifier>{fced4a32-0434-42a4-b5b0-3d4d020177bd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

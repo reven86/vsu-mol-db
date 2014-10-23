@@ -1,2 +1,7 @@
 ﻿entry:
  # UI from forms
+ - {key: UI_tube_generator, value: "Нанотрубка"}
+ - {key: UI_chiralityA1, value: "Первый индекс хиральности"}
+ - {key: UI_chiralityA2, value: "Второй индекс хиральности"}
+ - {key: UI_tube_height, value: "Высота трубки"}
+

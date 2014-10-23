@@ -14,10 +14,13 @@ class VSUDatabale : public DfgGame
     class SceneService * _sceneService;
 
     std::string _clientUUID;
+    Settings _settings;
 
 public:
     VSUDatabale();
     virtual ~VSUDatabale();
+
+    Settings * getSettings() { return &_settings; };
 
 protected:
     void initialize();

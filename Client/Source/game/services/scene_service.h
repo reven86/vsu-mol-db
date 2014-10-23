@@ -25,6 +25,8 @@ class SceneService : public Service
     class RenderService * _renderService;
     float _lastTime;
 
+    RefPtr< class MoleculeModel > _moleculeModel;
+
 public:
     SceneService(const ServiceManager * manager);
     virtual ~SceneService();
@@ -36,11 +38,18 @@ public:
 
     void render();
 
+    void insertNode(gameplay::Node * node);
+
 private:
     bool onTouchEvent(const gameplay::Touch::TouchEvent& ev, int x, int y, unsigned contactIndex);
     bool onMouseEvent(const gameplay::Mouse::MouseEvent& ev, int x, int y, int wheelDelta);
     bool onGesturePinchEvent(int x, int y, float scale, int numberOfTouches);
+    void onSidebarWidthChanged(float width);
+
     void updateCamera();
+
+    bool bindUniforms(gameplay::Node * node);
+    bool drawNode(gameplay::Node * node);
 };
 
 

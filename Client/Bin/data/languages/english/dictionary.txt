@@ -1,2 +1,7 @@
 ﻿entry:
  # UI from forms
+ - {key: UI_tube_generator, value: "Carbon Tube"}
+ - {key: UI_chiralityA1, value: "Chirality index 1"}
+ - {key: UI_chiralityA2, value: "Chirality index 2"}
+ - {key: UI_tube_height, value: "Tube height"}
+

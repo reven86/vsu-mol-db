@@ -48,8 +48,10 @@
 #include "main/dictionary.h"
 
 #include "game/signals.h"
+#include "game/settings.h"
 
 extern Dictionary gameDictionary;       // global dictionary.
+extern Settings * getSettings();
 
 
 #endif // __DFG_PCH__

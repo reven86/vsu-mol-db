@@ -3,6 +3,7 @@
 #include "services/service_manager.h"
 #include "services/tracker_service.h"
 #include "render/mem_fn_render_click.h"
+#include "game/generators/tube_generator.h"
 #include "main.h"
 
 
@@ -33,6 +34,11 @@ bool UIService::OnInit()
     renderClick.reset(new MemFnRenderClick< UIService >(this, &UIService::renderUI, "UIRenderClick"));
     _uiRenderStep->AddRenderClick(renderClick);
 
+    _form->getControl("sidebarToggleButton")->addListener(this, gameplay::Control::Listener::CLICK);
+    _form->getControl("chiralityA1Slider")->addListener(this, gameplay::Control::Listener::VALUE_CHANGED);
+    _form->getControl("chiralityA2Slider")->addListener(this, gameplay::Control::Listener::VALUE_CHANGED);
+    _form->getControl("tubeHeightSlider")->addListener(this, gameplay::Control::Listener::VALUE_CHANGED);
+
     float scaleFactor = getUIScaleFactor();
     scaleUIControls(_form.get(), scaleFactor, scaleFactor);
 
@@ -42,7 +48,8 @@ bool UIService::OnInit()
 
     _trackerService = ServiceManager::Instance().FindService< TrackerService >();
 
-    //getViewSettings()->setSidebarWidth(_form->getControl("sidebarControls")->getWidth());
+    getSettings()->setSidebarWidth(_form->getControl("sidebarControls")->getWidth());
+    generateTube();
 
     return true;
 }
@@ -63,6 +70,30 @@ void UIService::renderUI() const
 
 void UIService::controlEvent(gameplay::Control* control, gameplay::Control::Listener::EventType evt)
 {
+    if (!strcmp(control->getId(), "sidebarToggleButton"))
+    {
+        if (_form->getControl("sidebarControls")->isVisible())
+        {
+            _form->getControl("sidebarControls")->setVisible(false);
+            getSettings()->setSidebarWidth(0.0f);
+            static_cast<gameplay::Button *>(control)->setText(L">>");
+            control->setX(0.0f);
+        }
+        else
+        {
+            _form->getControl("sidebarControls")->setVisible(true);
+            getSettings()->setSidebarWidth(_form->getControl("sidebarControls")->getWidth());
+            static_cast<gameplay::Button *>(control)->setText(L"<<");
+            control->setX(_form->getControl("sidebarControls")->getWidth());
+        }
+    }
+    else if (!strcmp(control->getId(), "tubeHeightSlider")
+        || !strcmp(control->getId(), "chiralityA1Slider")
+        || !strcmp(control->getId(), "chiralityA2Slider")
+        )
+    {
+        generateTube();
+    }
 }
 
 void UIService::hideControl(gameplay::Control * control)
@@ -166,4 +197,19 @@ void UIService::scaleUIControls(gameplay::Container * container, float kx, float
 float UIService::getUIScaleFactor() const
 {
     return static_cast<float>(gameplay::Game::getInstance()->getHeight()) / 768.0f;// (_isTablet ? 768.0f : 320.0f);
+}
+
+void UIService::generateTube()
+{
+    std::vector<Molecule::Atom> atoms;
+    std::vector<Molecule::Link> links;
+
+    int a1 = static_cast<int>(static_cast<gameplay::Slider *>(_form->getControl("chiralityA1Slider"))->getValue());
+    int a2 = static_cast<int>(static_cast<gameplay::Slider *>(_form->getControl("chiralityA2Slider"))->getValue());
+    int h = static_cast<int>(static_cast<gameplay::Slider *>(_form->getControl("tubeHeightSlider"))->getValue());
+
+    TubeGenerator gen;
+    gen.generateCarbonTube(a1, a2, h, atoms, links);
+
+    getSettings()->getMolecule()->setup(atoms, links);
 }

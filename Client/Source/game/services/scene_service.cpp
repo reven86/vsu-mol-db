@@ -2,6 +2,9 @@
 #include "scene_service.h"
 #include "services/render_service.h"
 #include "services/service_manager.h"
+#include "game/primitives.h"
+#include "game/molecule.h"
+#include "game/molecule_model.h"
 
 
 
@@ -41,16 +44,24 @@ bool SceneService::OnInit()
     ServiceManager::Instance().signals.inputMouseEvent.connect(10, sigc::mem_fun(this, &SceneService::onMouseEvent));
     ServiceManager::Instance().signals.inputGesturePinchEvent.connect(10, sigc::mem_fun(this, &SceneService::onGesturePinchEvent));
 
+    getSettings()->sidebarWidthChangedSignal.connect(sigc::mem_fun(this, &SceneService::onSidebarWidthChanged));
+
     _renderService = _manager->FindService<RenderService>();
 
     gameplay::Game::getInstance()->registerGesture(gameplay::Gesture::GESTURE_PINCH);
+
+    PrimitivesPool::Instance().generatePrimitives();
+
+    _moleculeModel.reset(MoleculeModel::create(getSettings()->getMolecule()));
+    insertNode(_moleculeModel->getRootNode());
+    _moleculeModel->modelChangedSignal.connect(sigc::bind(sigc::mem_fun(this, &SceneService::insertNode), _moleculeModel->getRootNode()));
 
     updateCamera();
     _lastTime = static_cast< float >(gameplay::Game::getInstance()->getGameTime() * 0.001f);
 
     float vpwidth = static_cast<float>(gameplay::Game::getInstance()->getWidth());
     float vpheight = static_cast<float>(gameplay::Game::getInstance()->getHeight());
-    float sidebarWidth = 0.0f;// getViewSettings()->getSidebarWidth();
+    float sidebarWidth = getSettings()->getSidebarWidth();
     _camera->setAspectRatio((vpwidth - sidebarWidth) / vpheight);
 
     return true;
@@ -69,12 +80,17 @@ bool SceneService::OnTick()
 
 void SceneService::render()
 {
+    if (GetState() != SceneService::ES_RUNNING)
+        return;
+
     float vpwidth = static_cast<float>(gameplay::Game::getInstance()->getWidth());
     float vpheight = static_cast<float>(gameplay::Game::getInstance()->getHeight());
-    float sidebarWidth = 0.0f;// getViewSettings()->getSidebarWidth();
+    float sidebarWidth = getSettings()->getSidebarWidth();
 
     gameplay::Rectangle prevViewport = gameplay::Game::getInstance()->getViewport();
     gameplay::Game::getInstance()->setViewport(gameplay::Rectangle(sidebarWidth, 0.0f, vpwidth - sidebarWidth, vpheight));
+
+    _scene->visit(this, &SceneService::drawNode);
 
     gameplay::Game::getInstance()->setViewport(prevViewport);
 }
@@ -95,7 +111,7 @@ bool SceneService::onTouchEvent(const gameplay::Touch::TouchEvent& ev, int x, in
     {
         float vpwidth = static_cast<float>(gameplay::Game::getInstance()->getWidth());
         float vpheight = static_cast<float>(gameplay::Game::getInstance()->getHeight());
-        float sidebarWidth = 0.0;// getViewSettings()->getSidebarWidth();
+        float sidebarWidth = getSettings()->getSidebarWidth();
 
         gameplay::Ray ray;
         _camera->pickRay(gameplay::Rectangle(sidebarWidth, 0.0f, vpwidth - sidebarWidth, vpheight), _touchStart.x, _touchStart.y, &ray);
@@ -112,7 +128,7 @@ bool SceneService::onTouchEvent(const gameplay::Touch::TouchEvent& ev, int x, in
             _touchStart = touchPos;
 
             _cameraTheta = std::min(MATH_PIOVER2 * 0.99f, std::max(-MATH_PIOVER2 * 0.99f, _cameraTheta + MATH_PI * delta.y / gameplay::Game::getInstance()->getViewport().height));
-            _cameraPhi = fmodf(_cameraPhi + MATH_PI * delta.x / gameplay::Game::getInstance()->getViewport().width, MATH_PIX2);
+            _cameraPhi = fmodf(_cameraPhi - MATH_PI * delta.x / gameplay::Game::getInstance()->getViewport().width, MATH_PIX2);
             updateCamera();
         }
         else if (delta.length() > gameplay::Game::getInstance()->getViewport().height * 0.01f)
@@ -132,7 +148,7 @@ bool SceneService::onMouseEvent(const gameplay::Mouse::MouseEvent& ev, int x, in
     {
         //_cameraDistance = std::min(15.0f, std::max(3.0f, _cameraDistance * pow(0.9f, wheelDelta)));
         //updateCamera();
-        float fov = std::min(60.0f, std::max(10.0f, _camera->getFieldOfView() * powf(0.9f, static_cast< float >(wheelDelta))));
+        float fov = std::min(90.0f, std::max(10.0f, _camera->getFieldOfView() * powf(0.9f, static_cast< float >(wheelDelta))));
         _camera->setFieldOfView(fov);
         return true;
     }
@@ -156,18 +172,52 @@ void SceneService::updateCamera()
 
     gameplay::Quaternion rotation;
     transform.decompose(NULL, &rotation, NULL);
-    _camera->getNode()->set(gameplay::Vector3(-1.0f, 1.0f, 1.0f), rotation, translate);
+    _camera->getNode()->set(gameplay::Vector3::one(), rotation, translate);
 }
 
 bool SceneService::onGesturePinchEvent(int x, int y, float scale, int numberOfTouches)
 {
     if (numberOfTouches > 0)
     {
-        float fov = std::min(60.0f, std::max(10.0f, _camera->getFieldOfView() * _lastPinchScale / scale));
+        float fov = std::min(90.0f, std::max(10.0f, _camera->getFieldOfView() * _lastPinchScale / scale));
         _camera->setFieldOfView(fov);
     }
 
     _lastPinchScale = scale;
 
     return true;
+}
+
+void SceneService::insertNode(gameplay::Node * node)
+{
+    if (node->getScene() != _scene)
+        _scene->addNode(node);
+    _scene->visit(this, &SceneService::bindUniforms);
+}
+
+bool SceneService::bindUniforms(gameplay::Node * node)
+{
+    if (node->getModel())
+    {
+        node->getModel()->getMaterial()->getParameter("u_directionalLightColor[0]")->setValue(_light->getColor());
+        node->getModel()->getMaterial()->getParameter("u_directionalLightDirection[0]")->bindValue(_camera->getNode(), &gameplay::Node::getForwardVectorView);
+    }
+
+    return true;
+}
+
+bool SceneService::drawNode(gameplay::Node * node)
+{
+    if (node->getModel())
+        node->getModel()->draw();
+
+    return true;
+}
+
+void SceneService::onSidebarWidthChanged(float width)
+{
+    float vpwidth = static_cast<float>(gameplay::Game::getInstance()->getWidth());
+    float vpheight = static_cast<float>(gameplay::Game::getInstance()->getHeight());
+
+    _camera->setAspectRatio((vpwidth - width) / vpheight);
 }

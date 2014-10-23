@@ -1,0 +1,26 @@
+material:
+  sampler:
+    id: u_diffuseTexture
+    path: materials/system/white.png
+    mipmap: false
+    wrapS: CLAMP
+    wrapT: CLAMP
+    minFilter: NEAREST
+    magFilter: NEAREST
+
+  u_ambientColor: SCENE_AMBIENT_COLOR
+  u_worldViewProjectionMatrix: WORLD_VIEW_PROJECTION_MATRIX
+  u_worldViewMatrix: WORLD_VIEW_MATRIX
+
+  renderState:
+    cullFace: true
+    depthTest: true
+    depthWrite: true
+    blend: false
+
+  technique:
+    pass:
+      defines: "DIRECTIONAL_LIGHT_COUNT 1"
+
+      vertexShader: res/shaders/textured.vert
+      fragmentShader: res/shaders/textured.frag

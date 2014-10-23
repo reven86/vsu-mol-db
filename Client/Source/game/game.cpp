@@ -169,7 +169,7 @@ void VSUDatabale::render(float elapsedTime)
 {
     PROFILE( "SODGame::render", "Render" );
 
-    clear( gameplay::Game::CLEAR_COLOR_DEPTH, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0 );
+    clear( gameplay::Game::CLEAR_COLOR_DEPTH, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 0 );
 
     if (_sceneService)
         _sceneService->render();
