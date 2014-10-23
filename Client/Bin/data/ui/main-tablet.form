@@ -74,6 +74,7 @@ form:
           min: 0
           max: 100
           value: 100
+          step: 1
           text: UI_tube_transition
           orientation: HORIZONTAL
           valueTextVisible: true
