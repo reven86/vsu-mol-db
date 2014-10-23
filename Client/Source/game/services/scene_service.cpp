@@ -69,12 +69,6 @@ bool SceneService::OnInit()
 
 bool SceneService::OnTick()
 {
-    float time = static_cast< float >(gameplay::Game::getInstance()->getGameTime() * 0.001f);
-    float dt = time - _lastTime;
-    _lastTime = time;
-
-    _scene->update(dt * 1000.0f);
-
     return false;
 }
 

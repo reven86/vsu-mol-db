@@ -4,4 +4,5 @@
  - {key: UI_chiralityA1, value: "Первый индекс хиральности"}
  - {key: UI_chiralityA2, value: "Второй индекс хиральности"}
  - {key: UI_tube_height, value: "Высота трубки"}
+ - {key: UI_tube_transition, value: "Скручивание"}
 

@@ -38,6 +38,7 @@ bool UIService::OnInit()
     _form->getControl("chiralityA1Slider")->addListener(this, gameplay::Control::Listener::VALUE_CHANGED);
     _form->getControl("chiralityA2Slider")->addListener(this, gameplay::Control::Listener::VALUE_CHANGED);
     _form->getControl("tubeHeightSlider")->addListener(this, gameplay::Control::Listener::VALUE_CHANGED);
+    _form->getControl("tubeTransitionSlider")->addListener(this, gameplay::Control::Listener::VALUE_CHANGED);
 
     float scaleFactor = getUIScaleFactor();
     scaleUIControls(_form.get(), scaleFactor, scaleFactor);
@@ -90,6 +91,7 @@ void UIService::controlEvent(gameplay::Control* control, gameplay::Control::List
     else if (!strcmp(control->getId(), "tubeHeightSlider")
         || !strcmp(control->getId(), "chiralityA1Slider")
         || !strcmp(control->getId(), "chiralityA2Slider")
+        || !strcmp(control->getId(), "tubeTransitionSlider")
         )
     {
         generateTube();
@@ -207,9 +209,10 @@ void UIService::generateTube()
     int a1 = static_cast<int>(static_cast<gameplay::Slider *>(_form->getControl("chiralityA1Slider"))->getValue());
     int a2 = static_cast<int>(static_cast<gameplay::Slider *>(_form->getControl("chiralityA2Slider"))->getValue());
     int h = static_cast<int>(static_cast<gameplay::Slider *>(_form->getControl("tubeHeightSlider"))->getValue());
+    float transition = 0.01f * static_cast<gameplay::Slider *>(_form->getControl("tubeTransitionSlider"))->getValue();
 
     TubeGenerator gen;
-    gen.generateCarbonTube(a1, a2, h, atoms, links);
+    gen.generateCarbonTube(a1, a2, h, transition, atoms, links);
 
     getSettings()->getMolecule()->setup(atoms, links);
 }

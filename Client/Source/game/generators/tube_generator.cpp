@@ -12,7 +12,7 @@ TubeGenerator::~TubeGenerator()
 {
 }
 
-void TubeGenerator::generateCarbonTube(int n1, int n2, int k, std::vector<Molecule::Atom>& atoms, std::vector<Molecule::Link>& links)
+void TubeGenerator::generateCarbonTube(int n1, int n2, int k, float transition, std::vector<Molecule::Atom>& atoms, std::vector<Molecule::Link>& links)
 {
     if (n1 < n2)
         std::swap(n1, n2);
@@ -98,12 +98,15 @@ void TubeGenerator::generateCarbonTube(int n1, int n2, int k, std::vector<Molecu
     }
 
     // bend graphene
-    for (auto it = atoms.begin(), end_it = atoms.end(); it != end_it; it++)
+    if (transition > 0.0f)
     {
-        float radius = R.length() / MATH_PIX2;
-        float phi = (*it).pos.x / radius;
-        (*it).pos.x = radius * cosf(phi);
-        (*it).pos.z = radius * sinf(phi);
+        for (auto it = atoms.begin(), end_it = atoms.end(); it != end_it; it++)
+        {
+            float radius = R.length() / MATH_PIX2 / transition;
+            float phi = (*it).pos.x / radius;
+            (*it).pos.x = radius * sinf(phi);
+            (*it).pos.z = radius * cosf(phi);
+        }
     }
 
     // add new links

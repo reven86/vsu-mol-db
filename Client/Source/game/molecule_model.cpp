@@ -61,18 +61,7 @@ void MoleculeModel::setupModel()
         _rootNode->addChild(atomNode);
         SAFE_RELEASE(atomNode);
 
-        if ((*it).pos.x < _bbox.min.x)
-            _bbox.min.x = (*it).pos.x;
-        else if ((*it).pos.x > _bbox.max.x)
-            _bbox.max.x = (*it).pos.x;
-        if ((*it).pos.y < _bbox.min.y)
-            _bbox.min.y = (*it).pos.y;
-        else if ((*it).pos.y > _bbox.max.y)
-            _bbox.max.y = (*it).pos.y;
-        if ((*it).pos.z < _bbox.min.z)
-            _bbox.min.z = (*it).pos.z;
-        else if ((*it).pos.z > _bbox.max.z)
-            _bbox.max.z = (*it).pos.z;
+        _bbox.enlarge((*it).pos);
     }
 
     if (!_molecule->getLinks().empty())

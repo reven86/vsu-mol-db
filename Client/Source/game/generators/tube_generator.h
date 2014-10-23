@@ -13,7 +13,7 @@ public:
     TubeGenerator();
     virtual ~TubeGenerator();
 
-    void generateCarbonTube(int n1, int n2, int k, std::vector<Molecule::Atom>& atoms, std::vector<Molecule::Link>& links);
+    void generateCarbonTube(int n1, int n2, int k, float transition, std::vector<Molecule::Atom>& atoms, std::vector<Molecule::Link>& links);
 };
 
 
