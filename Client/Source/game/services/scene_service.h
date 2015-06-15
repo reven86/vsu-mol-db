@@ -31,10 +31,10 @@ public:
     SceneService(const ServiceManager * manager);
     virtual ~SceneService();
 
-    static const char * GetName() { return "SceneService"; }
+    static const char * getTypeName() { return "SceneService"; }
 
-    virtual bool OnInit();
-    virtual bool OnTick();
+    virtual bool onInit();
+    virtual bool onTick();
 
     void render();
 

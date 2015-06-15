@@ -23,7 +23,7 @@ SceneService::~SceneService()
 {
 }
 
-bool SceneService::OnInit()
+bool SceneService::onInit()
 {
     _scene.reset(gameplay::Scene::create());
     _scene->setAmbientColor(0.1f, 0.1f, 0.1f);
@@ -40,17 +40,17 @@ bool SceneService::OnInit()
     lightNode->setLight(_light);
     lightNode->setRotation(gameplay::Vector3(1.0f, 0.0f, 0.0f), -MATH_PIOVER4);
 
-    ServiceManager::Instance().signals.inputTouchEvent.connect(10, sigc::mem_fun(this, &SceneService::onTouchEvent));
-    ServiceManager::Instance().signals.inputMouseEvent.connect(10, sigc::mem_fun(this, &SceneService::onMouseEvent));
-    ServiceManager::Instance().signals.inputGesturePinchEvent.connect(10, sigc::mem_fun(this, &SceneService::onGesturePinchEvent));
+    ServiceManager::getInstance()->signals.inputTouchEvent.connect(10, sigc::mem_fun(this, &SceneService::onTouchEvent));
+    ServiceManager::getInstance()->signals.inputMouseEvent.connect(10, sigc::mem_fun(this, &SceneService::onMouseEvent));
+    ServiceManager::getInstance()->signals.inputGesturePinchEvent.connect(10, sigc::mem_fun(this, &SceneService::onGesturePinchEvent));
 
     getSettings()->sidebarWidthChangedSignal.connect(sigc::mem_fun(this, &SceneService::onSidebarWidthChanged));
 
-    _renderService = _manager->FindService<RenderService>();
+    _renderService = _manager->findService<RenderService>();
 
     gameplay::Game::getInstance()->registerGesture(gameplay::Gesture::GESTURE_PINCH);
 
-    PrimitivesPool::Instance().generatePrimitives();
+    PrimitivesPool::getInstance()->generatePrimitives();
 
     _moleculeModel.reset(MoleculeModel::create(getSettings()->getMolecule()));
     insertNode(_moleculeModel->getRootNode());
@@ -67,14 +67,14 @@ bool SceneService::OnInit()
     return true;
 }
 
-bool SceneService::OnTick()
+bool SceneService::onTick()
 {
     return false;
 }
 
 void SceneService::render()
 {
-    if (GetState() != SceneService::ES_RUNNING)
+    if (getState() != SceneService::RUNNING)
         return;
 
     float vpwidth = static_cast<float>(gameplay::Game::getInstance()->getWidth());
@@ -191,10 +191,10 @@ void SceneService::insertNode(gameplay::Node * node)
 
 bool SceneService::bindUniforms(gameplay::Node * node)
 {
-    if (node->getModel())
+    if (node->getDrawable())
     {
-        node->getModel()->getMaterial()->getParameter("u_directionalLightColor[0]")->setValue(_light->getColor());
-        node->getModel()->getMaterial()->getParameter("u_directionalLightDirection[0]")->bindValue(_camera->getNode(), &gameplay::Node::getForwardVectorView);
+        static_cast<gameplay::Model *>(node->getDrawable())->getMaterial()->getParameter("u_directionalLightColor[0]")->setValue(_light->getColor());
+        static_cast<gameplay::Model *>(node->getDrawable())->getMaterial()->getParameter("u_directionalLightDirection[0]")->bindValue(_camera->getNode(), &gameplay::Node::getForwardVectorView);
     }
 
     return true;
@@ -202,8 +202,8 @@ bool SceneService::bindUniforms(gameplay::Node * node)
 
 bool SceneService::drawNode(gameplay::Node * node)
 {
-    if (node->getModel())
-        node->getModel()->draw();
+    if (node->getDrawable())
+        node->getDrawable()->draw();
 
     return true;
 }

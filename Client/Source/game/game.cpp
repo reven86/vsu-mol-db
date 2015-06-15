@@ -121,7 +121,7 @@ void VSUDatabale::initialize()
     gameplay::FileSystem::setResourcePath( ( resPath + "data/" ).c_str( ) );
 #endif
 
-    _clientUUID = GenerateUUID();
+    _clientUUID = Utils::generateUUID();
 
     loadSettings();
     //TrackerService * tracker = ServiceManager::Instance().RegisterService< TrackerService >(NULL);
@@ -134,18 +134,19 @@ void VSUDatabale::initialize()
         setVsync( false );
         setMultiTouch( true );
 
-        Service * uiDep[] = { ServiceManager::Instance().FindService<RenderService>(), NULL };
-        UIService * uiService = ServiceManager::Instance().RegisterService<UIService>(uiDep);
+        Service * uiDep[] = { ServiceManager::getInstance()->findService<RenderService>(), NULL };
+        UIService * uiService = ServiceManager::getInstance()->registerService<UIService>(uiDep);
 
         Service * sceneDep[] = { uiService, NULL };
-        _sceneService = ServiceManager::Instance().RegisterService<SceneService>(sceneDep);
+        _sceneService = ServiceManager::getInstance()->registerService<SceneService>(sceneDep);
 
 #ifdef _DEBUG
         Service * debugDep[] = { uiService, NULL };
-        DebugService * debugService = ServiceManager::Instance().RegisterService< DebugService >(debugDep);
-        debugService->Setup( 
-            _renderService->RegisterSpriteMaterial( MaterialAsset::Cache( ).Register( "materials/system/white_alpha.material" )->ShareAsset( ) ), 
-            FontAsset::Cache( ).Register( "@font/arial.gpb" )->ShareAsset( ), 0.5f );
+
+        const SpriteBatchAsset * spritebatch = SpriteBatchAsset::getCache().load("materials/system/white_alpha.material");
+        DebugService * debugService = ServiceManager::getInstance()->registerService< DebugService >(debugDep);
+        const GameplayRefAsset<gameplay::Font> * font = GameplayRefAsset<gameplay::Font>::getCache().load("@font/arial.gpb");
+        debugService->setup(spritebatch->get(), font->get(), 0.5f);
 #endif
     }
     catch( std::exception& e )
@@ -156,7 +157,7 @@ void VSUDatabale::initialize()
     }
 
     gameplay::Properties * properties = gameplay::Properties::create("@dictionary.txt");
-    gameDictionary.Create(properties);
+    gameDictionary.create(properties);
     SAFE_DELETE(properties);
 }
 
@@ -179,7 +180,7 @@ void VSUDatabale::render(float elapsedTime)
 
 void VSUDatabale::loadSettings()
 {
-    std::string filename = std::string(GetUserDataFolder()) + "/settings.dat";
+    std::string filename = std::string(getUserDataFolder()) + "/settings.dat";
     try
     {
         gameplay::Stream * stream(gameplay::FileSystem::open(filename.c_str(), gameplay::FileSystem::READ));
@@ -210,7 +211,7 @@ void VSUDatabale::loadSettings()
 
 void VSUDatabale::saveSettings()
 {
-    std::string filename = std::string(GetUserDataFolder()) + "/settings.dat";
+    std::string filename = std::string(getUserDataFolder()) + "/settings.dat";
     gameplay::Stream * stream(gameplay::FileSystem::open(filename.c_str(), gameplay::FileSystem::WRITE));
 
     if (stream)

@@ -43,7 +43,7 @@ void MoleculeModel::setupModel()
 
     for (auto it = _molecule->getAtoms().begin(), end_it = _molecule->getAtoms().end(); it != end_it; it++)
     {
-        gameplay::Model * model = gameplay::Model::create(PrimitivesPool::Instance().getSphereMesh());
+        gameplay::Model * model = gameplay::Model::create(PrimitivesPool::getInstance()->getSphereMesh());
 
         _defaultMaterialProperties->rewind();
         gameplay::Material * material = gameplay::Material::create(_defaultMaterialProperties->getNextNamespace());
@@ -51,7 +51,7 @@ void MoleculeModel::setupModel()
         SAFE_RELEASE(material);
 
         gameplay::Node * atomNode = gameplay::Node::create("atomNode");
-        atomNode->setModel(model);
+        atomNode->setDrawable(model);
         SAFE_RELEASE(model);
 
         float scale = powf(static_cast<float>((*it).index), 0.33333f) * 0.25f;
@@ -98,7 +98,7 @@ void MoleculeModel::setupModel()
 
             for (int i = 0; i < (*it).count; i++, offset += doffset)
             {
-                gameplay::Model * model = gameplay::Model::create(PrimitivesPool::Instance().getCylinderMesh());
+                gameplay::Model * model = gameplay::Model::create(PrimitivesPool::getInstance()->getCylinderMesh());
 
                 _defaultMaterialProperties->rewind();
                 gameplay::Material * material = gameplay::Material::create(_defaultMaterialProperties->getNextNamespace());
@@ -106,7 +106,7 @@ void MoleculeModel::setupModel()
                 SAFE_RELEASE(material);
 
                 gameplay::Node * linkNode = gameplay::Node::create("linkNode");
-                linkNode->setModel(model);
+                linkNode->setDrawable(model);
                 SAFE_RELEASE(model);
 
                 gameplay::Matrix transform;

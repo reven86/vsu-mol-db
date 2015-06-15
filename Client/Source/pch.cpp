@@ -4,7 +4,7 @@
 
 
 
-Dictionary gameDictionary;
+template<> Cache< GameplayRefAsset< gameplay::Font > > * GameplayRefAsset< gameplay::Font >::_cache = nullptr;
 
 Settings * getSettings()
 {

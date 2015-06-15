@@ -2,7 +2,6 @@
 #include "ui_service.h"
 #include "services/service_manager.h"
 #include "services/tracker_service.h"
-#include "render/mem_fn_render_click.h"
 #include "game/generators/tube_generator.h"
 #include "main.h"
 
@@ -19,20 +18,19 @@ UIService::~UIService()
 {
 }
 
-bool UIService::OnInit()
+bool UIService::onInit()
 {
     _isTablet = gameplay::Game::getInstance()->getHeight() >= 768;
 
     _form.reset(gameplay::Form::create("ui/main-tablet.form"));// _isTablet ? "ui/main-tablet.form" : "ui/main.form"));
     _updateTime = static_cast< float >(gameplay::Game::getInstance()->getGameTime());
 
-    RenderService * rs = _manager->FindService< RenderService >();
+    RenderService * rs = _manager->findService< RenderService >();
 
-    _uiRenderStep.reset(rs->CreateRenderStep("UIRenderStep"));
+    _uiRenderStep.reset(rs->createRenderStep("UIRenderStep"));
 
-    RefPtr< RenderClick > renderClick;
-    renderClick.reset(new MemFnRenderClick< UIService >(this, &UIService::renderUI, "UIRenderClick"));
-    _uiRenderStep->AddRenderClick(renderClick);
+    _uiRenderClick.reset(new RenderClick("UTRenderClick", std::bind(&UIService::renderUI, this)));
+    _uiRenderStep->addRenderClick(_uiRenderClick.get());
 
     _form->getControl("sidebarToggleButton")->addListener(this, gameplay::Control::Listener::CLICK);
     _form->getControl("chiralityA1Slider")->addListener(this, gameplay::Control::Listener::VALUE_CHANGED);
@@ -47,7 +45,7 @@ bool UIService::OnInit()
     _form->update(0.0f);
     _form->update(0.0f);
 
-    _trackerService = ServiceManager::Instance().FindService< TrackerService >();
+    _trackerService = ServiceManager::getInstance()->findService< TrackerService >();
 
     getSettings()->setSidebarWidth(_form->getControl("sidebarControls")->getWidth());
     generateTube();
@@ -55,7 +53,7 @@ bool UIService::OnInit()
     return true;
 }
 
-bool UIService::OnTick()
+bool UIService::onTick()
 {
     float newTime = static_cast< float >(gameplay::Game::getInstance()->getGameTime());
     _form->update(newTime - _updateTime);
@@ -149,15 +147,15 @@ void UIService::scaleUIControl(gameplay::Control * control, float kx, float ky)
     //    checkbox->setImageSize( checkbox->getImageSize( ).x * kx, checkbox->getImageSize( ).y * ky );
     //}
 
-    if (!strcmp(control->getType(), "slider"))
+    if (!strcmp(control->getTypeName(), "Slider"))
         static_cast<gameplay::Slider *>(control)->setScaleFactor(0.5f * ky);
 
-    if (!strcmp(control->getType(), "label")
-        || !strcmp(control->getType(), "button")
-        || !strcmp(control->getType(), "textbox")
-        || !strcmp(control->getType(), "checkBox")
-        || !strcmp(control->getType(), "slider")
-        || !strcmp(control->getType(), "radioButton")
+    if (!strcmp(control->getTypeName(), "Label")
+        || !strcmp(control->getTypeName(), "Button")
+        || !strcmp(control->getTypeName(), "TextBox")
+        || !strcmp(control->getTypeName(), "CheckBox")
+        || !strcmp(control->getTypeName(), "Slider")
+        || !strcmp(control->getTypeName(), "RadioButton")
         )
     {
         gameplay::Label * label = static_cast< gameplay::Label * >(control);
@@ -166,11 +164,11 @@ void UIService::scaleUIControl(gameplay::Control * control, float kx, float ky)
         std::string key;
         std::copy(text, text + wcslen(text), std::back_inserter(key));
 
-        if (gameDictionary.HasEntry(key.c_str()))
-            label->setText(gameDictionary.Lookup(key.c_str()).c_str());
+        if (gameDictionary.hasEntry(key.c_str()))
+            label->setText(gameDictionary.lookup(key.c_str()).c_str());
     }
 
-    if (!strcmp(control->getType(), "image"))
+    if (!strcmp(control->getTypeName(), "ImageControl"))
     {
         gameplay::ImageControl * image = static_cast< gameplay::ImageControl * >(control);
         const gameplay::Rectangle& dstRegion = image->getRegionDst();
@@ -188,8 +186,8 @@ void UIService::scaleUIControls(gameplay::Container * container, float kx, float
     const std::vector< gameplay::Control * >& controls = container->getControls();
     for (unsigned j = 0; j < controls.size(); j++)
     {
-        const char * type = controls[j]->getType();
-        if (!strcmp(type, "container"))
+        const char * type = controls[j]->getTypeName();
+        if (!strcmp(type, "Container"))
             scaleUIControls(static_cast< gameplay::Container * >(controls[j]), kx, ky);
         else
             scaleUIControl(controls[j], kx, ky);

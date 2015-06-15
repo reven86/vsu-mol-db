@@ -16,17 +16,18 @@ class UIService : public Service, public gameplay::Control::Listener
 
     bool _isTablet;
 
-    RefPtr< RenderStep > _uiRenderStep;
+    std::unique_ptr< RenderStep > _uiRenderStep;
+    std::unique_ptr< RenderClick > _uiRenderClick;
     class TrackerService * _trackerService;
 
 public:
     UIService(const ServiceManager * manager);
     virtual ~UIService();
 
-    static const char * GetName() { return "UIService"; }
+    static const char * getTypeName() { return "UIService"; }
 
-    virtual bool OnInit();
-    virtual bool OnTick();
+    virtual bool onInit();
+    virtual bool onTick();
 
 private:
     void renderUI() const;
