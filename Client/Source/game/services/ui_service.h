@@ -41,6 +41,10 @@ private:
     float getUIScaleFactor() const;
 
     void generateTube();
+
+    void onSaveButton();
+    void onSaveCubeButton();
+    void updateBBoxLabels();
 };
 
 

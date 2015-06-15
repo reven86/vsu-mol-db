@@ -5,4 +5,8 @@
  - {key: UI_chiralityA2, value: "Второй индекс хиральности"}
  - {key: UI_tube_height, value: "Высота трубки"}
  - {key: UI_tube_transition, value: "Скручивание"}
-
+ - {key: UI_save, value: "Сохранить"}
+ - {key: UI_bbox, value: "Куб (мин, макс)"}
+ - {key: UI_segments, value: "Куб (точки)"}
+ - {key: UI_save_cube, value: "Сохранить (куб)"}
+ - {key: UI_extent, value: "Расш."}

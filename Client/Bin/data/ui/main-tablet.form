@@ -78,3 +78,71 @@ form:
           text: UI_tube_transition
           orientation: HORIZONTAL
           valueTextVisible: true
+
+      container:
+      - layout: LAYOUT_VERTICAL
+        width: 100%
+        margin: {top: 20}
+
+        button:
+          id: saveButton
+          width: 100%
+          text: UI_save
+
+      container:
+      - layout: LAYOUT_VERTICAL
+        width: 100%
+        margin: {top: 20}
+
+        container:
+        - width: 100%
+          layout: LAYOUT_VERTICAL
+          label:
+          - text: UI_bbox
+            style: TitleLabel
+        - layout: LAYOUT_HORIZONTAL
+          width: 100%
+          label:
+            text: UI_extent
+            width: 50%
+            style: H2Label
+          textBox:
+          - id: bboxExtent
+            width: 50%
+            text: 0
+        - width: 100%
+          layout: LAYOUT_VERTICAL
+          label:
+          - id: bboxMinLabel
+            style: H2Label
+          - id: bboxMaxLabel
+            style: H2Label
+
+      container:
+      - layout: LAYOUT_VERTICAL
+        width: 100%
+        margin: {top: 20}
+
+        label:
+        - text: UI_segments
+          style: H2Label
+
+        container:
+          layout: LAYOUT_HORIZONTAL
+          width: 100%
+          textBox:
+          - id: bboxXCount
+            width: 33%
+            text: 100
+          - id: bboxYCount
+            width: 33%
+            text: 100
+          - id: bboxZCount
+            width: 33%
+            text: 100
+
+        button:
+          id: saveCubeButton
+          width: 100%
+          text: UI_save_cube
+

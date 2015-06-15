@@ -12,8 +12,6 @@ class MoleculeModel : public gameplay::Ref
     RefPtr< gameplay::Node > _rootNode;
     gameplay::Properties * _defaultMaterialProperties;
 
-    gameplay::BoundingBox _bbox;
-
 public:
     sigc::signal<void> modelChangedSignal;
 

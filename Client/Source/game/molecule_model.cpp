@@ -39,8 +39,6 @@ void MoleculeModel::setupModel()
     else
         _rootNode.reset(gameplay::Node::create("rootNode"));
 
-    _bbox = gameplay::BoundingBox::empty();
-
     for (auto it = _molecule->getAtoms().begin(), end_it = _molecule->getAtoms().end(); it != end_it; it++)
     {
         gameplay::Model * model = gameplay::Model::create(PrimitivesPool::getInstance()->getSphereMesh());
@@ -60,8 +58,6 @@ void MoleculeModel::setupModel()
         atomNode->setScale(scale, scale, scale);
         _rootNode->addChild(atomNode);
         SAFE_RELEASE(atomNode);
-
-        _bbox.enlarge((*it).pos);
     }
 
     if (!_molecule->getLinks().empty())
@@ -121,7 +117,7 @@ void MoleculeModel::setupModel()
         }
     }
 
-    _rootNode->setTranslation(-_bbox.getCenter());
+    _rootNode->setTranslation(-_molecule->getBBox().getCenter());
 
     modelChangedSignal();
 }

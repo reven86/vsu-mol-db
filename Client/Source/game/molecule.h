@@ -27,6 +27,8 @@ private:
     std::vector<Atom> _atoms;
     std::vector<Link> _links;
 
+    gameplay::BoundingBox _bbox;
+
 public:
     sigc::signal<void> atomsChangedSignal;
     sigc::signal<void> linksChangedSignal;
@@ -43,9 +45,12 @@ public:
 
     const std::vector<Atom>& getAtoms() const { return _atoms; };
     const std::vector<Link>& getLinks() const { return _links; };
+    const gameplay::BoundingBox& getBBox() const { return _bbox; };
 
 protected:
     Molecule();
+
+    void updateBBox();
 };
 
 

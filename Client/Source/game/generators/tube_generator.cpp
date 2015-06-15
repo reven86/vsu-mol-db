@@ -36,6 +36,10 @@ void TubeGenerator::generateCarbonTube(int n1, int n2, int k, float transition, 
     int xmax = static_cast<int>(ceilf(R.x / bondLength / a1.x - a2.x * ymax)) + 1;
 
     std::map<std::tuple<int, int, int>, int> clippedAtoms;
+    
+    float Rlen = R.length();
+    float Llen = L.length();
+    float eps = 0.0001f;
 
     for (int y = ymin; y <= ymax; y++)
         for (int x = xmin; x <= xmax; x++)
@@ -55,13 +59,13 @@ void TubeGenerator::generateCarbonTube(int n1, int n2, int k, float transition, 
                 atomPosition = hexagonCenter + atomPosition * bondLength;
 
                 // clip atoms by square defined by R and L vectors
-                float u = gameplay::Vector2::dot(atomPosition, R);
-                float v = gameplay::Vector2::dot(atomPosition, L);
+                float u = gameplay::Vector2::dot(atomPosition, R) / Rlen;
+                float v = gameplay::Vector2::dot(atomPosition, L) / Llen;
 
-                if (u >= -0.00001f && v >= -0.00001f && u < R.lengthSquared() && v < L.lengthSquared())
+                if (u >= -eps && v >= -eps && u < Rlen - eps && v < Llen - eps)
                 {
                     clippedAtoms.insert(std::make_pair(std::make_tuple(x, y, i), static_cast<int>(atoms.size())));
-                    atoms.push_back({ 1, 0.0f, gameplay::Vector3(u / R.length(), v / L.length(), 0.0f) });
+                    atoms.push_back({ 1, 0.0f, gameplay::Vector3(u, v, 0.0f) });
                     //atoms.push_back({ 1, 0.0f, gameplay::Vector3(atomPosition.x, atomPosition.y, 0.0f) });
                 }
             }

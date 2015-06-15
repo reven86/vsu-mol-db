@@ -37,6 +37,9 @@ bool UIService::onInit()
     _form->getControl("chiralityA2Slider")->addListener(this, gameplay::Control::Listener::VALUE_CHANGED);
     _form->getControl("tubeHeightSlider")->addListener(this, gameplay::Control::Listener::VALUE_CHANGED);
     _form->getControl("tubeTransitionSlider")->addListener(this, gameplay::Control::Listener::VALUE_CHANGED);
+    _form->getControl("saveButton")->addListener(this, gameplay::Control::Listener::CLICK);
+    _form->getControl("saveCubeButton")->addListener(this, gameplay::Control::Listener::CLICK);
+    _form->getControl("bboxExtent")->addListener(this, gameplay::Control::Listener::TEXT_CHANGED);
 
     float scaleFactor = getUIScaleFactor();
     scaleUIControls(_form.get(), scaleFactor, scaleFactor);
@@ -93,6 +96,18 @@ void UIService::controlEvent(gameplay::Control* control, gameplay::Control::List
         )
     {
         generateTube();
+    }
+    else if (!strcmp(control->getId(), "saveButton"))
+    {
+        onSaveButton();
+    }
+    else if (!strcmp(control->getId(), "bboxExtent"))
+    {
+        updateBBoxLabels();
+    }
+    else if (!strcmp(control->getId(), "saveCubeButton"))
+    {
+        onSaveCubeButton();
     }
 }
 
@@ -167,7 +182,7 @@ void UIService::scaleUIControl(gameplay::Control * control, float kx, float ky)
         if (gameDictionary.hasEntry(key.c_str()))
             label->setText(gameDictionary.lookup(key.c_str()).c_str());
     }
-
+    
     if (!strcmp(control->getTypeName(), "ImageControl"))
     {
         gameplay::ImageControl * image = static_cast< gameplay::ImageControl * >(control);
@@ -213,4 +228,89 @@ void UIService::generateTube()
     gen.generateCarbonTube(a1, a2, h, transition, atoms, links);
 
     getSettings()->getMolecule()->setup(atoms, links);
+    updateBBoxLabels();
+}
+
+void UIService::updateBBoxLabels()
+{
+    float extent = static_cast<float>(_wtof(static_cast<gameplay::TextBox *>(_form->getControl("bboxExtent"))->getText()));
+
+    gameplay::BoundingBox bbox = getSettings()->getMolecule()->getBBox();
+    bbox.min -= gameplay::Vector3(extent, extent, extent);
+    bbox.max += gameplay::Vector3(extent, extent, extent);
+    static_cast<gameplay::Label *>(_form->getControl("bboxMinLabel"))->setText(Utils::UTF8ToWCS(Utils::format("%.2f %.2f %.2f", bbox.min.x, bbox.min.y, bbox.min.z)));
+    static_cast<gameplay::Label *>(_form->getControl("bboxMaxLabel"))->setText(Utils::UTF8ToWCS(Utils::format("%.2f %.2f %.2f", bbox.max.x, bbox.max.y, bbox.max.z)));
+}
+
+void UIService::onSaveButton()
+{
+    Molecule * mol = getSettings()->getMolecule();
+    GP_ASSERT(mol);
+
+    std::string fileName = gameplay::FileSystem::displayFileDialog(gameplay::FileSystem::SAVE, "Save file", "TXT files", "txt", NULL);
+    if (fileName.empty())
+        return;
+
+    FILE * file = fopen(fileName.c_str(), "wt");
+    if (!file)
+        return;
+
+    for (auto atom : mol->getAtoms())
+    {
+        GP_ASSERT(atom.index == 1);
+        fprintf(file, "C %f %f %f\n", atom.pos.x, atom.pos.y, atom.pos.z);
+    }
+
+    fclose(file);
+}
+
+void UIService::onSaveCubeButton()
+{
+    Molecule * mol = getSettings()->getMolecule();
+    GP_ASSERT(mol);
+
+    std::string fileName = gameplay::FileSystem::displayFileDialog(gameplay::FileSystem::SAVE, "Save file", "TXT files", "txt", NULL);
+    if (fileName.empty())
+        return;
+
+    FILE * file = fopen(fileName.c_str(), "wt");
+    if (!file)
+        return;
+
+    float extent = static_cast<float>(_wtof(static_cast<gameplay::TextBox *>(_form->getControl("bboxExtent"))->getText()));
+
+    gameplay::BoundingBox bbox = getSettings()->getMolecule()->getBBox();
+    bbox.min -= gameplay::Vector3(extent, extent, extent);
+    bbox.max += gameplay::Vector3(extent, extent, extent);
+
+    int xcount = _wtoi(static_cast<gameplay::TextBox *>(_form->getControl("bboxXCount"))->getText());
+    int ycount = _wtoi(static_cast<gameplay::TextBox *>(_form->getControl("bboxYCount"))->getText());
+    int zcount = _wtoi(static_cast<gameplay::TextBox *>(_form->getControl("bboxZCount"))->getText());
+
+    if (xcount <= 0)
+        xcount = 100;
+    if (ycount <= 0)
+        ycount = 100;
+    if (zcount <= 0)
+        zcount = 100;
+
+    for (auto atom : mol->getAtoms())
+    {
+        GP_ASSERT(atom.index == 1);
+        fprintf(file, "C %f %f %f\n", atom.pos.x, atom.pos.y, atom.pos.z);
+    }
+
+    gameplay::Vector3 bboxSize = bbox.max - bbox.min;
+    bboxSize.x /= xcount;
+    bboxSize.y /= ycount;
+    bboxSize.z /= zcount;
+
+    fprintf(file, "\n");
+    fprintf(file, "%s.cub\n", fileName.c_str());
+    fprintf(file, "-1 %f %f %f\n", bbox.min.x, bbox.min.y, bbox.min.z);
+    fprintf(file, "%d %f %f %f\n", xcount, bboxSize.x, 0.0f, 0.0f);
+    fprintf(file, "%d %f %f %f\n", ycount, 0.0f, bboxSize.y, 0.0f);
+    fprintf(file, "%d %f %f %f\n", zcount, 0.0f, 0.0f, bboxSize.z);
+
+    fclose(file);
 }
