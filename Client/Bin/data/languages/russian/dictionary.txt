@@ -10,3 +10,5 @@
  - {key: UI_segments, value: "Куб (точки)"}
  - {key: UI_save_cube, value: "Сохранить (куб)"}
  - {key: UI_extent, value: "Расш."}
+ - {key: UI_tube_properties, value: "Радиус=%.5f\nВысота=%.5f"}
+ - {key: UI_bond_length, value: "Длина C-C связи"}

@@ -45,6 +45,7 @@ private:
     void onSaveButton();
     void onSaveCubeButton();
     void updateBBoxLabels();
+    void updateTubePropertiesLabels();
 };
 
 

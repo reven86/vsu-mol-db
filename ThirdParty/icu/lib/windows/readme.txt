@@ -1,1 +1,0 @@
-build_icu.bat x64 static release

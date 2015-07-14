@@ -13,7 +13,7 @@ SceneService::SceneService(const ServiceManager * manager)
     , _cameraPhi(0.0f)
     , _cameraTheta(0.0f)
     , _touchStart(0.0f, 0.0f)
-    , _cameraDistance(15.0f)
+    , _cameraDistance(20.0f)
     , _dragDetected(false)
     , _lastPinchScale(1.0f)
 {
@@ -54,7 +54,7 @@ bool SceneService::onInit()
 
     _moleculeModel.reset(MoleculeModel::create(getSettings()->getMolecule()));
     insertNode(_moleculeModel->getRootNode());
-    _moleculeModel->modelChangedSignal.connect(sigc::bind(sigc::mem_fun(this, &SceneService::insertNode), _moleculeModel->getRootNode()));
+    _moleculeModel->modelChangedSignal.connect(sigc::mem_fun(this, &SceneService::moleculeChanged));
 
     updateCamera();
     _lastTime = static_cast< float >(gameplay::Game::getInstance()->getGameTime() * 0.001f);
@@ -63,6 +63,32 @@ bool SceneService::onInit()
     float vpheight = static_cast<float>(gameplay::Game::getInstance()->getHeight());
     float sidebarWidth = getSettings()->getSidebarWidth();
     _camera->setAspectRatio((vpwidth - sidebarWidth) / vpheight);
+
+    gameplay::Vector3 axisX[] = { gameplay::Vector3::zero(), gameplay::Vector3::unitX() };
+    gameplay::Vector3 axisY[] = { gameplay::Vector3::zero(), gameplay::Vector3::unitY() };
+    gameplay::Vector3 axisZ[] = { gameplay::Vector3::zero(), gameplay::Vector3::unitZ() };
+    gameplay::Mesh * axisXMesh = gameplay::Mesh::createLines(axisX, 2);
+    gameplay::Mesh * axisYMesh = gameplay::Mesh::createLines(axisY, 2);
+    gameplay::Mesh * axisZMesh = gameplay::Mesh::createLines(axisZ, 2);
+    _axisXModel.reset(gameplay::Model::create(axisXMesh));
+    _axisYModel.reset(gameplay::Model::create(axisYMesh));
+    _axisZModel.reset(gameplay::Model::create(axisZMesh));
+    _axisXModel->setMaterial("materials/models/line.material");
+    _axisYModel->setMaterial("materials/models/line.material");
+    _axisZModel->setMaterial("materials/models/line.material");
+    _axisXModel->getMaterial()->getParameter("u_modulateColor")->setVector4(gameplay::Vector4(1.0f, 0.0f, 0.0f, 1.0f));
+    _axisYModel->getMaterial()->getParameter("u_modulateColor")->setVector4(gameplay::Vector4(0.0f, 1.0f, 0.0f, 1.0f));
+    _axisZModel->getMaterial()->getParameter("u_modulateColor")->setVector4(gameplay::Vector4(0.0f, 0.0f, 1.0f, 1.0f));
+    SAFE_RELEASE(axisXMesh);
+    SAFE_RELEASE(axisYMesh);
+    SAFE_RELEASE(axisZMesh);
+
+    gameplay::Node * axisXNode = _scene->addNode("AxisX");
+    gameplay::Node * axisYNode = _scene->addNode("AxisY");
+    gameplay::Node * axisZNode = _scene->addNode("AxisZ");
+    axisXNode->setDrawable(_axisXModel.get());
+    axisYNode->setDrawable(_axisYModel.get());
+    axisZNode->setDrawable(_axisZModel.get());
 
     return true;
 }
@@ -193,8 +219,12 @@ bool SceneService::bindUniforms(gameplay::Node * node)
 {
     if (node->getDrawable())
     {
-        static_cast<gameplay::Model *>(node->getDrawable())->getMaterial()->getParameter("u_directionalLightColor[0]")->setValue(_light->getColor());
-        static_cast<gameplay::Model *>(node->getDrawable())->getMaterial()->getParameter("u_directionalLightDirection[0]")->bindValue(_camera->getNode(), &gameplay::Node::getForwardVectorView);
+        gameplay::Effect * effect = static_cast<gameplay::Model *>(node->getDrawable())->getMaterial()->getTechnique()->getPassByIndex(0)->getEffect();
+
+        if (effect->getUniform("u_directionalLightColor[0]"))
+            static_cast<gameplay::Model *>(node->getDrawable())->getMaterial()->getParameter("u_directionalLightColor[0]")->setValue(_light->getColor());
+        if (effect->getUniform("u_directionalLightDirection[0]"))
+            static_cast<gameplay::Model *>(node->getDrawable())->getMaterial()->getParameter("u_directionalLightDirection[0]")->bindValue(_camera->getNode(), &gameplay::Node::getForwardVectorView);
     }
 
     return true;
@@ -214,4 +244,13 @@ void SceneService::onSidebarWidthChanged(float width)
     float vpheight = static_cast<float>(gameplay::Game::getInstance()->getHeight());
 
     _camera->setAspectRatio((vpwidth - width) / vpheight);
+}
+
+void SceneService::moleculeChanged()
+{
+    insertNode(_moleculeModel->getRootNode());
+    const gameplay::Vector3& translation = _moleculeModel->getRootNode()->getTranslationWorld();
+    _axisXModel->getNode()->setTranslation(translation);
+    _axisYModel->getNode()->setTranslation(translation);
+    _axisZModel->getNode()->setTranslation(translation);
 }

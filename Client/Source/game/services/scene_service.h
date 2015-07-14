@@ -26,6 +26,9 @@ class SceneService : public Service
     float _lastTime;
 
     RefPtr< class MoleculeModel > _moleculeModel;
+    RefPtr< gameplay::Model > _axisXModel;
+    RefPtr< gameplay::Model > _axisYModel;
+    RefPtr< gameplay::Model > _axisZModel;
 
 public:
     SceneService(const ServiceManager * manager);
@@ -45,6 +48,7 @@ private:
     bool onMouseEvent(const gameplay::Mouse::MouseEvent& ev, int x, int y, int wheelDelta);
     bool onGesturePinchEvent(int x, int y, float scale, int numberOfTouches);
     void onSidebarWidthChanged(float width);
+    void moleculeChanged();
 
     void updateCamera();
 

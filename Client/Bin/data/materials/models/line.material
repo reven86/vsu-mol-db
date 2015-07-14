@@ -1,0 +1,25 @@
+material:
+  sampler:
+    id: u_diffuseTexture
+    path: materials/system/white.png
+    mipmap: false
+    wrapS: CLAMP
+    wrapT: CLAMP
+    minFilter: NEAREST
+    magFilter: NEAREST
+
+  u_modulateColor: [1.0, 0.0, 0.0, 1.0]
+  u_worldViewProjectionMatrix: WORLD_VIEW_PROJECTION_MATRIX
+
+  renderState:
+    cullFace: true
+    depthTest: true
+    depthWrite: true
+    blend: false
+
+  technique:
+    pass:
+      defines: "MODULATE_COLOR"
+
+      vertexShader: res/shaders/textured.vert
+      fragmentShader: res/shaders/textured.frag

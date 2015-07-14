@@ -12,15 +12,13 @@ TubeGenerator::~TubeGenerator()
 {
 }
 
-void TubeGenerator::generateCarbonTube(int n1, int n2, int k, float transition, std::vector<Molecule::Atom>& atoms, std::vector<Molecule::Link>& links)
+void TubeGenerator::generateCarbonTube(int n1, int n2, int k, float transition, float bondLength, std::vector<Molecule::Atom>& atoms, std::vector<Molecule::Link>& links)
 {
     if (n1 < n2)
         std::swap(n1, n2);
 
     atoms.clear();
     links.clear();
-
-    const float bondLength = 1.0f;
 
     gameplay::Vector2 a1(1.7320508f, 0.0f);
     gameplay::Vector2 a2(-0.8660254f, 1.5f);
@@ -45,7 +43,7 @@ void TubeGenerator::generateCarbonTube(int n1, int n2, int k, float transition, 
         for (int x = xmin; x <= xmax; x++)
         {
             // process hexagon atoms
-            gameplay::Vector2 hexagonCenter(x * bondLength * a1.x + a2.x * y, y * bondLength * a2.y);
+            gameplay::Vector2 hexagonCenter(x * bondLength * a1.x + a2.x * y * bondLength, y * bondLength * a2.y);
 
             // process only two hexagon's atoms
             // these are unique to hexagon

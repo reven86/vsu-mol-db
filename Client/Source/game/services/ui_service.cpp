@@ -37,6 +37,7 @@ bool UIService::onInit()
     _form->getControl("chiralityA2Slider")->addListener(this, gameplay::Control::Listener::VALUE_CHANGED);
     _form->getControl("tubeHeightSlider")->addListener(this, gameplay::Control::Listener::VALUE_CHANGED);
     _form->getControl("tubeTransitionSlider")->addListener(this, gameplay::Control::Listener::VALUE_CHANGED);
+    _form->getControl("bondLengthSlider")->addListener(this, gameplay::Control::Listener::VALUE_CHANGED);
     _form->getControl("saveButton")->addListener(this, gameplay::Control::Listener::CLICK);
     _form->getControl("saveCubeButton")->addListener(this, gameplay::Control::Listener::CLICK);
     _form->getControl("bboxExtent")->addListener(this, gameplay::Control::Listener::TEXT_CHANGED);
@@ -93,6 +94,7 @@ void UIService::controlEvent(gameplay::Control* control, gameplay::Control::List
         || !strcmp(control->getId(), "chiralityA1Slider")
         || !strcmp(control->getId(), "chiralityA2Slider")
         || !strcmp(control->getId(), "tubeTransitionSlider")
+        || !strcmp(control->getId(), "bondLengthSlider")
         )
     {
         generateTube();
@@ -223,12 +225,14 @@ void UIService::generateTube()
     int a2 = static_cast<int>(static_cast<gameplay::Slider *>(_form->getControl("chiralityA2Slider"))->getValue());
     int h = static_cast<int>(static_cast<gameplay::Slider *>(_form->getControl("tubeHeightSlider"))->getValue());
     float transition = 0.01f * static_cast<gameplay::Slider *>(_form->getControl("tubeTransitionSlider"))->getValue();
+    float bondLength = static_cast<gameplay::Slider *>(_form->getControl("bondLengthSlider"))->getValue();
 
     TubeGenerator gen;
-    gen.generateCarbonTube(a1, a2, h, transition, atoms, links);
+    gen.generateCarbonTube(a1, a2, h, transition, bondLength, atoms, links);
 
     getSettings()->getMolecule()->setup(atoms, links);
     updateBBoxLabels();
+    updateTubePropertiesLabels();
 }
 
 void UIService::updateBBoxLabels()
@@ -240,6 +244,31 @@ void UIService::updateBBoxLabels()
     bbox.max += gameplay::Vector3(extent, extent, extent);
     static_cast<gameplay::Label *>(_form->getControl("bboxMinLabel"))->setText(Utils::UTF8ToWCS(Utils::format("%.2f %.2f %.2f", bbox.min.x, bbox.min.y, bbox.min.z)));
     static_cast<gameplay::Label *>(_form->getControl("bboxMaxLabel"))->setText(Utils::UTF8ToWCS(Utils::format("%.2f %.2f %.2f", bbox.max.x, bbox.max.y, bbox.max.z)));
+}
+
+void UIService::updateTubePropertiesLabels()
+{
+    int n1 = static_cast<int>(static_cast<gameplay::Slider *>(_form->getControl("chiralityA1Slider"))->getValue());
+    int n2 = static_cast<int>(static_cast<gameplay::Slider *>(_form->getControl("chiralityA2Slider"))->getValue());
+    int k = static_cast<int>(static_cast<gameplay::Slider *>(_form->getControl("tubeHeightSlider"))->getValue());
+    float transition = 0.01f * static_cast<gameplay::Slider *>(_form->getControl("tubeTransitionSlider"))->getValue();
+    float bondLength = static_cast<gameplay::Slider *>(_form->getControl("bondLengthSlider"))->getValue();
+    if (transition == 0.0f)
+        transition = 1.0f;
+
+    gameplay::Vector2 a1(1.7320508f, 0.0f);
+    gameplay::Vector2 a2(-0.8660254f, 1.5f);
+
+    gameplay::Vector2 R = (a1 * static_cast<float>(n1)+a2 * static_cast<float>(n2))* bondLength;
+    gameplay::Vector2 L(-R.y, R.x);
+    L.normalize();
+    L.scale(k * bondLength);
+
+    float radius = R.length() / MATH_PIX2 / transition;
+    gameplay::BoundingBox bbox = getSettings()->getMolecule()->getBBox();
+    float height = bbox.max.y - bbox.min.y;
+
+    static_cast<gameplay::Label *>(_form->getControl("tubePropertiesLabel"))->setText(Utils::UTF8ToWCS(Utils::format(gameDictionary.lookupUTF8("UI_tube_properties").c_str(), radius, height)));
 }
 
 void UIService::onSaveButton()
