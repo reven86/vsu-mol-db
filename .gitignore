@@ -23,3 +23,5 @@
 /Client/Source/_msvc/*.opensdf
 /Client/Source/_msvc/*.sdf
 /Client/Source/_msvc/*.suo
+/Client/Source/_msvc/.vs/vsu-mol-db/v14/*.suo
+/Client/Source/_msvc/*.db

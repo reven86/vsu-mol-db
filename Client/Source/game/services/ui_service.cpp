@@ -242,8 +242,8 @@ void UIService::updateBBoxLabels()
     gameplay::BoundingBox bbox = getSettings()->getMolecule()->getBBox();
     bbox.min -= gameplay::Vector3(extent, extent, extent);
     bbox.max += gameplay::Vector3(extent, extent, extent);
-    static_cast<gameplay::Label *>(_form->getControl("bboxMinLabel"))->setText(Utils::UTF8ToWCS(Utils::format("%.2f %.2f %.2f", bbox.min.x, bbox.min.y, bbox.min.z)));
-    static_cast<gameplay::Label *>(_form->getControl("bboxMaxLabel"))->setText(Utils::UTF8ToWCS(Utils::format("%.2f %.2f %.2f", bbox.max.x, bbox.max.y, bbox.max.z)));
+    static_cast<gameplay::Label *>(_form->getControl("bboxMinLabel"))->setText(Utils::UTF8ToWCS(Utils::format("%.2f %.2f %.2f", bbox.min.x, bbox.min.y, bbox.min.z)).c_str());
+    static_cast<gameplay::Label *>(_form->getControl("bboxMaxLabel"))->setText(Utils::UTF8ToWCS(Utils::format("%.2f %.2f %.2f", bbox.max.x, bbox.max.y, bbox.max.z)).c_str());
 }
 
 void UIService::updateTubePropertiesLabels()
@@ -268,7 +268,7 @@ void UIService::updateTubePropertiesLabels()
     gameplay::BoundingBox bbox = getSettings()->getMolecule()->getBBox();
     float height = bbox.max.y - bbox.min.y;
 
-    static_cast<gameplay::Label *>(_form->getControl("tubePropertiesLabel"))->setText(Utils::UTF8ToWCS(Utils::format(gameDictionary.lookupUTF8("UI_tube_properties").c_str(), radius, height)));
+    static_cast<gameplay::Label *>(_form->getControl("tubePropertiesLabel"))->setText(Utils::UTF8ToWCS(Utils::format(gameDictionary.lookupUTF8("UI_tube_properties").c_str(), radius, height)).c_str());
 }
 
 void UIService::onSaveButton()

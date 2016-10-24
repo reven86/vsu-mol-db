@@ -1,10 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="UserMacros">
+    <GAMEPLAY_PATH>..\..\..\..\GamePlay\</GAMEPLAY_PATH>
+  </PropertyGroup>
   <PropertyGroup>
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
     <OutDir>$(SolutionDir)_$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)_$(Configuration)\obj\</IntDir>
   </PropertyGroup>
+  <ItemGroup>
+    <BuildMacro Include="GAMEPLAY_PATH">
+      <Value>$(GAMEPLAY_PATH)</Value>
+    </BuildMacro>
+  </ItemGroup>
   <ItemDefinitionGroup>
     <ClCompile>
       <AdditionalIncludeDirectories>$(GAMEPLAY_PATH)gameplay\src;$(GAMEPLAY_PATH)external-deps\include;$(SolutionDir)..\..\..\..\dfg-gameplay\third_party\libcurl\include;$(SolutionDir)..\..\..\..\dfg-gameplay\third_party\libsigc++\include;$(SolutionDir)..\..\..\..\dfg-gameplay\third_party\icu\include;$(SolutionDir)..\..\..\..\dfg-gameplay\third_party\zip\include;$(SolutionDir)..\;$(SolutionDir)..\game;$(SolutionDir)..\..\..\..\dfg-gameplay\client\source\base;$(SolutionDir)..\..\..\..\dfg-gameplay\client\source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -16,7 +24,7 @@
       <WarningLevel>Level4</WarningLevel>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>libcurl.lib;libsigc++.lib;libyaml.lib;zipstatic.lib;gameplay.lib;gameplay-deps.lib;dfg-gameplay.lib;rpcrt4.lib;urlmon.lib;Ws2_32.lib;Wldap32.lib;OpenGL32.lib;GLU32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>gameplay.lib;gameplay-deps.lib;dfg-gameplay.lib;rpcrt4.lib;urlmon.lib;Ws2_32.lib;Wldap32.lib;OpenGL32.lib;GLU32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(GAMEPLAY_PATH)gameplay\windows\$(PlatformTarget)\$(Configuration);$(GAMEPLAY_PATH)external-deps\lib\windows\x86_64\$(Configuration);$(SolutionDir)..\..\..\..\dfg-gameplay\third_party\libsigc++\lib\windows\$(PlatformTarget)\$(Configuration);$(SolutionDir)..\..\..\..\dfg-gameplay\third_party\libcurl\lib\windows\$(PlatformTarget);$(SolutionDir)..\..\..\..\dfg-gameplay\third_party\icu\lib\windows\$(PlatformTarget)\$(Configuration);$(SolutionDir)..\..\..\..\dfg-gameplay\third_party\zip\lib\windows\$(PlatformTarget)\Release;$(SolutionDir)..\..\..\..\dfg-gameplay\client\source\_msvc\_$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
