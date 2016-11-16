@@ -54,7 +54,9 @@ bool UIService::onInit()
     getSettings()->setSidebarWidth(_form->getControl("sidebarControls")->getWidth());
     generateTube();
 
-    return true;
+	ServiceManager::getInstance()->signals.resizeEvent.connect(sigc::mem_fun(this, &UIService::onResizeEvent));
+
+	return true;
 }
 
 bool UIService::onTick()
@@ -342,4 +344,15 @@ void UIService::onSaveCubeButton()
     fprintf(file, "%d %f %f %f\n", zcount, 0.0f, 0.0f, bboxSize.z);
 
     fclose(file);
+}
+
+void UIService::onResizeEvent(unsigned int width, unsigned int height)
+{
+	// make sure form is updated for the same viewport used during rendering
+	float vpwidth = static_cast<float>(gameplay::Game::getInstance()->getWidth());
+	float vpheight = static_cast<float>(gameplay::Game::getInstance()->getHeight());
+	gameplay::Game::getInstance()->setViewport(gameplay::Rectangle(0.0f, 0.0f, vpwidth, vpheight));
+	_form->update(0.0f);
+
+	getSettings()->setSidebarWidth(_form->getControl("sidebarControls")->getWidth());
 }

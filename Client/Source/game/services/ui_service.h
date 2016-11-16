@@ -39,6 +39,7 @@ private:
     virtual void controlEvent(gameplay::Control* control, gameplay::Control::Listener::EventType evt);
 
     float getUIScaleFactor() const;
+	void onResizeEvent(unsigned int width, unsigned int height);
 
     void generateTube();
 

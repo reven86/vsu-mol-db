@@ -3,17 +3,17 @@
 
 
 
-Settings::Settings()
+AppSettings::AppSettings()
     : _sidebarWidth(0.0f)
 {
     _molecule.reset(Molecule::create(std::vector<Molecule::Atom>(), std::vector<Molecule::Link>()));
 }
 
-Settings::~Settings()
+AppSettings::~AppSettings()
 {
 }
 
-void Settings::setSidebarWidth(float width)
+void AppSettings::setSidebarWidth(float width)
 {
     _sidebarWidth = width;
     sidebarWidthChangedSignal(width);

@@ -6,7 +6,7 @@
 
 template<> Cache< GameplayRefAsset< gameplay::Font > > * GameplayRefAsset< gameplay::Font >::_cache = nullptr;
 
-Settings * getSettings()
+AppSettings * getSettings()
 {
     return static_cast<VSUDatabale *>(gameplay::Game::getInstance())->getSettings();
 }

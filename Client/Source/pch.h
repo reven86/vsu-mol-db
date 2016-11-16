@@ -12,7 +12,7 @@
 #include "signals.h"
 #include "settings.h"
 
-extern Settings * getSettings();
+extern AppSettings * getSettings();
 
 
 #endif // __DFG_PCH__

@@ -7,7 +7,7 @@
 
 
 
-class Settings
+class AppSettings
 {
     RefPtr< Molecule > _molecule;
     float _sidebarWidth;
@@ -15,8 +15,8 @@ class Settings
 public:
     sigc::signal<void, float> sidebarWidthChangedSignal;
 
-    Settings();
-    virtual ~Settings();
+	AppSettings();
+    virtual ~AppSettings();
 
     Molecule * getMolecule() { return _molecule.get(); };
     float getSidebarWidth() const { return _sidebarWidth; };
